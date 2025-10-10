@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Form</title>
+<style>
+  body { font-family: Arial; background: #f4f4f4; display:flex; justify-content:center; align-items:center; height:100vh; }
+  form { background: white; padding: 25px 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  input, textarea, button { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; font-size:15px; }
+  button { background:#007bff; color:white; cursor:pointer; transition:.3s; }
+  button:hover { background:#0056b3; }
+</style>
+</head>
+<body>
+
+<form id="contactForm">
+  <h2>Contact Us</h2>
+  <input type="text" id="name" placeholder="Your Name" required>
+  <input type="email" id="email" placeholder="Your Email" required>
+  <textarea id="message" placeholder="Your Message" required></textarea>
+  <button type="submit">Send</button>
+</form>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  // Loader
+  const loader = document.createElement("div");
+  loader.innerHTML = "⏳ Sending...";
+  loader.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:white;padding:20px 30px;border-radius:10px;font-size:18px;z-index:9999";
+  document.body.appendChild(loader);
+
+  try {
+    const response = await fetch("http://localhost:5000/submit", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ name,email,message })
+    });
+
+    document.body.removeChild(loader);
+
+    if(response.ok){
+      const popup = document.createElement("div");
+      popup.innerHTML = "✅ your data has submitted in Aadi databse 😈💀";
+      popup.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#4CAF50;color:white;padding:20px 40px;border-radius:10px;font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:9999";
+      document.body.appendChild(popup);
+
+      setTimeout(()=>{
+        document.body.removeChild(popup);
+        document.getElementById("contactForm").reset();
+      }, 2000);
+    } else {
+      alert("❌ Something went wrong! Please check backend.");
+    }
+
+  } catch(err){
+    document.body.removeChild(loader);
+    alert("⚠️ Server error! Check if Node backend is running.");
+    console.error(err);
+  }
+});
+</script>
+
+</body>
+</html>
+
