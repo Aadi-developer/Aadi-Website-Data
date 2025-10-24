@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 
 // ✅ Step 1: Connect MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/aadiWebsiteDB", {
+  .connect("mongodb://localhost:27017/WebsiteDatabase", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("✅ Connected to MongoDB: aadiWebsiteDB"))
+  .then(() => console.log("✅ Connected to MongoDB: WebsiteDatabase"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // ✅ Step 2: Define Schema & Model
@@ -52,3 +52,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
+
